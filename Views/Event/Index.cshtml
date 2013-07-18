@@ -1,0 +1,151 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script type="text/javascript">
+    function formatDate(datetime) {
+        var dateobj = new Date(datetime);
+        //alert(datetime);
+        var res = dateobj.getFullYear() + '/' + (dateobj.getMonth() + 1) + '/' + dateobj.getDate() + ' ' + dateobj.getHours() + ':' + dateobj.getMinutes() + ':' + dateobj.getSeconds();
+        //alert(res);
+        return res;
+    }
+
+    function refreshEventData() {
+        var url = 'http://api.atnd.org/events/?count=100';
+        // 'http://api.atnd.org/events/?keyword=microsoft&count=100&format=jsonp&callback=?'
+        var search_arr = $('#search_text').val().split(/\s+/);
+        $.each(search_arr, function (i, val) {
+            search_arr[i] = encodeURI(val);
+        });
+        var search_val = search_arr.join(',');
+        if (search_val.length > 0)
+            url = url + '&keyword=' + search_val;
+        $.getJSON(url + '&format=jsonp&callback=?',
+            function (result) {
+                $('#tableData1').empty();
+                $("#template1").tmpl(result.events).appendTo("#tableData1");
+            });
+    }
+
+    function viewEvent(eventId) {
+        $.getJSON('http://api.atnd.org/events/?event_id=' + eventId + '&format=jsonp&callback=?',
+            function (result) {
+                $('#view_event_id').val(result.events[0].event_id);
+                $('#view_title').val(result.events[0].title);
+                $('#view_started_at').val(formatDate(result.events[0].started_at));
+                $('#view_ended_at').val(formatDate(result.events[0].ended_at));
+                $('#view_owner_nickname').val(result.events[0].owner_nickname);
+                $('#view_description').html(result.events[0].description);
+                $('#view_dialog').dialog('open');
+            });
+    }
+
+    $(document).ready(refreshEventData);
+    $(document).keypress(function (e) {
+        if (e.keyCode == 13) {
+            refreshEventData();
+            return false;
+        }
+    });
+</script>
+
+<h2>Japanese Event (国内イベント一覧)</h2>
+
+<div id="view_dialog" title="View E-Mail">
+<table>
+    <tr>
+        <td>Title</td>
+        <td colspan="3">
+            <input type="text" id="view_title" style="width:500px;" readonly="readonly" />
+        </td>
+    </tr>
+    <tr>
+        <td>Start</td>
+        <td>
+            <input type="text" id="view_started_at" style="width:180px;" readonly="readonly" />
+        </td>
+        <td>End</td>
+        <td>
+            <input type="text" id="view_ended_at" style="width:180px;" readonly="readonly" />
+        </td>
+    </tr>
+    <tr>
+        <td>Owner</td>
+        <td colspan="3">
+            <input type="text" id="view_owner_nickname" style="width:500px;" readonly="readonly" />
+        </td>
+    </tr>
+    <tr>
+        <td>Contents</td>
+        <td id="view_description" colspan="3" style="width:500px">
+        </td>
+    </tr>
+</table>
+@using (Html.BeginForm("OutlookIcs", "Event", FormMethod.Post, new { id = "outlookIcsForm" }))
+{
+    <input type="hidden" id="view_event_id" name="EventId" value="" />
+}
+</div>
+
+@using (@Html.BeginForm())
+{
+    <input id="search_text" type="text" />
+    <input type="button" value="Filter" onclick="javascript:refreshEventData();" />
+}
+
+<table border="1">
+    <thead>
+        <tr>
+            <th>
+            </th>
+            <th>
+                Event Title
+            </th>
+            <th>
+                Start
+            </th>
+            <th>
+                Owner
+            </th>
+        </tr>
+    </thead>
+    <script id="template1" type="text/x-jquery-tmpl">
+        <tr>
+            <td>
+                <a href="javascript:viewEvent('${event_id}');">View</a>
+            </td>
+            <td>
+                ${title}
+            </td>
+            <td>
+                ${formatDate(started_at)}
+            </td>
+            <td>
+                ${owner_nickname}
+            </td>
+        </tr>
+    </script>
+    <tbody id="tableData1">
+    </tbody>
+</table>
+
+<p>Max 100 records</p>
+
+<script type="text/javascript">
+    $('#view_dialog').dialog({
+        autoOpen: false,
+        modal: true,
+        width: 600,
+        buttons: {
+            'Add to Outlook': function () {
+                $('#outlookIcsForm').submit();
+                //location.href= "/Event/OutlookIcs";
+            },
+            'Close': function () {
+                $(this).dialog('close');
+            }
+        }
+    });
+</script>
