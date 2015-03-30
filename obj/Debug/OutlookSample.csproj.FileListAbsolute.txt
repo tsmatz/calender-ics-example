@@ -30,3 +30,10 @@ C:\pj\github\OutlookSample\bin\ja\System.Web.WebPages.Razor.resources.dll
 C:\pj\github\OutlookSample\obj\Debug\OutlookSample.csprojResolveAssemblyReference.cache
 C:\pj\github\OutlookSample\obj\Debug\OutlookSampleWebRole.dll
 C:\pj\github\OutlookSample\obj\Debug\OutlookSampleWebRole.pdb
+C:\Demo\tmp\OutlookSample\bin\OutlookSampleWebRole.dll.config
+C:\Demo\tmp\OutlookSample\bin\OutlookSampleWebRole.dll
+C:\Demo\tmp\OutlookSample\bin\OutlookSampleWebRole.pdb
+C:\Demo\tmp\OutlookSample\bin\Newtonsoft.Json.dll
+C:\Demo\tmp\OutlookSample\bin\Newtonsoft.Json.xml
+C:\Demo\tmp\OutlookSample\obj\Debug\OutlookSampleWebRole.dll
+C:\Demo\tmp\OutlookSample\obj\Debug\OutlookSampleWebRole.pdb

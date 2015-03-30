@@ -31,7 +31,7 @@ namespace OutlookSampleWebRole.Controllers
             //JsonObject resobj = (JsonObject)res.Content.ReadAsAsync<JsonValue>(new[] { new JsonValueMediaTypeFormatter() }).Result;
             JObject resobj = res.Content.ReadAsAsync<JObject>(new[] { new JsonMediaTypeFormatter() }).Result;
             JArray events = (JArray)resobj["events"];
-            JObject eventObj = (JObject)events[0];
+            JObject eventObj = (JObject) ((JObject)events[0])["event"];
 
             MemoryStream stream = new MemoryStream();
             StreamWriter writer = new StreamWriter(stream);

@@ -32,12 +32,12 @@
     function viewEvent(eventId) {
         $.getJSON('http://api.atnd.org/events/?event_id=' + eventId + '&format=jsonp&callback=?',
             function (result) {
-                $('#view_event_id').val(result.events[0].event_id);
-                $('#view_title').val(result.events[0].title);
-                $('#view_started_at').val(formatDate(result.events[0].started_at));
-                $('#view_ended_at').val(formatDate(result.events[0].ended_at));
-                $('#view_owner_nickname').val(result.events[0].owner_nickname);
-                $('#view_description').html(result.events[0].description);
+                $('#view_event_id').val(result.events[0].event.event_id);
+                $('#view_title').val(result.events[0].event.title);
+                $('#view_started_at').val(formatDate(result.events[0].event.started_at));
+                $('#view_ended_at').val(formatDate(result.events[0].event.ended_at));
+                $('#view_owner_nickname').val(result.events[0].event.owner_nickname);
+                $('#view_description').html(result.events[0].event.description);
                 $('#view_dialog').dialog('open');
             });
     }
@@ -114,16 +114,16 @@
     <script id="template1" type="text/x-jquery-tmpl">
         <tr>
             <td>
-                <a href="javascript:viewEvent('${event_id}');">View</a>
+                <a href="javascript:viewEvent('${event.event_id}');">View</a>
             </td>
             <td>
-                ${title}
+                ${event.title}
             </td>
             <td>
-                ${formatDate(started_at)}
+                ${formatDate(event.started_at)}
             </td>
             <td>
-                ${owner_nickname}
+                ${event.owner_nickname}
             </td>
         </tr>
     </script>
