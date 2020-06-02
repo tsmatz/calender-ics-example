@@ -24,14 +24,28 @@ namespace OutlookSampleWebRole.Controllers
 
         public ActionResult OutlookIcs(int EventId)
         {
-            string uri = "http://api.atnd.org/events/?event_id=" + EventId + "&format=json";
-            HttpClient cl = new HttpClient();
-            HttpResponseMessage res = cl.GetAsync(uri).Result;
+            //
+            // We use static dummy data, since Connpass API doesn't work on server-side
+            //
 
-            //JsonObject resobj = (JsonObject)res.Content.ReadAsAsync<JsonValue>(new[] { new JsonValueMediaTypeFormatter() }).Result;
-            JObject resobj = res.Content.ReadAsAsync<JObject>(new[] { new JsonMediaTypeFormatter() }).Result;
+            //string uri = "https://connpass.com/api/v1/event/?count=100&event_id=" + EventId;
+            //HttpClient cl = new HttpClient();
+            //cl.DefaultRequestHeaders.Add("User-Agent", "Other");
+            //HttpResponseMessage res = cl.GetAsync(uri).Result;
+            //JObject resobj = res.Content.ReadAsAsync<JObject>(new[] { new JsonMediaTypeFormatter() }).Result;
+            //JArray events = (JArray)resobj["events"];
+            //JObject eventObj = (JObject)((JObject)events[0])["event"];
+
+            //string uri = "http://api.atnd.org/events/?event_id=" + EventId + "&format=json";
+            //HttpClient cl = new HttpClient();
+            //HttpResponseMessage res = cl.GetAsync(uri).Result;
+            //JObject resobj = res.Content.ReadAsAsync<JObject>(new[] { new JsonMediaTypeFormatter() }).Result;
+            //JArray events = (JArray)resobj["events"];
+            //JObject eventObj = (JObject)((JObject)events[0])["event"];
+
+            JObject resobj = JObject.Parse(Dummy.Events);
             JArray events = (JArray)resobj["events"];
-            JObject eventObj = (JObject) ((JObject)events[0])["event"];
+            JObject eventObj = (JObject)events.FirstOrDefault(x => x.Value<int>("event_id") == EventId);
 
             MemoryStream stream = new MemoryStream();
             StreamWriter writer = new StreamWriter(stream);

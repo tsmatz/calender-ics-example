@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
+using System.Web.Http;
 
 namespace OutlookSampleWebRole
 {
@@ -34,6 +35,8 @@ namespace OutlookSampleWebRole
             AreaRegistration.RegisterAllAreas();
 
             RegisterGlobalFilters(GlobalFilters.Filters);
+            GlobalConfiguration.Configure(WebApiConfig.Register);
+            //WebApiConfig.Register(GlobalConfiguration.Configuration);
             RegisterRoutes(RouteTable.Routes);
         }
     }
